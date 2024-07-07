@@ -7,6 +7,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'seq)
 (require 'treepy)
 (require 'symbols-from-obarray)
 
@@ -34,6 +35,7 @@
       (exercism//file-to-string
        (file-name-concat input-dir (concat exercise-slug ".el")))
       (exercism//read-all-from-string)
+      (exercism//remove-docstrings)
       (exercism//macroexpand-all)
       (exercism//replace-symbols-with-placeholders
        symbols-not-to-replace))))
@@ -56,6 +58,21 @@
           result)
       (end-of-file))
     (nreverse result)))
+
+(defun exercism//remove-docstrings (expressions)
+  (treepy-prewalk
+   (lambda (ele)
+     (cond
+      ((and (listp ele)
+            (length> ele 2)
+            (seq-some
+             (lambda (symbol) (eq symbol (car ele)))
+             '(defun cl-defun))
+            (stringp (nth 3 ele)))
+       (seq-remove-at-position ele 3))
+      (t
+       ele)))
+   expressions))
 
 (defun exercism//macroexpand-all (expressions)
   (mapcar

@@ -5,6 +5,7 @@
 ;;; Code:
 
 (defun two-fer (&optional name)
+  "NAME is an optional argument."
   (let ((player (or name "you")))
     (concat "One for " player ", one for me.")))
 
