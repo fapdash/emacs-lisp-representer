@@ -26,20 +26,17 @@
       (json-pretty-print-buffer))))
 
 (defun exercism//represent (input-dir exercise-slug)
-  (let* ((symbols-not-to-replace
-          (exercism//find-all-defined-symbols
-           (file-name-concat input-dir
-                             (concat exercise-slug "-test.el"))))
-         (solution-text
-          (exercism//file-to-string
-           (file-name-concat input-dir (concat exercise-slug ".el"))))
-         (expressions (exercism//read-all-from-string solution-text))
-         (expressions-macroexpanded
-          (exercism//macroexpand-all expressions))
-         (expressions-symbols-replaced
-          (exercism//replace-symbols-with-placeholders
-           expressions-macroexpanded symbols-not-to-replace)))
-    expressions-symbols-replaced))
+  (let ((symbols-not-to-replace
+         (exercism//find-all-defined-symbols
+          (file-name-concat input-dir
+                            (concat exercise-slug "-test.el")))))
+    (thread-first
+      (exercism//file-to-string
+       (file-name-concat input-dir (concat exercise-slug ".el")))
+      (exercism//read-all-from-string)
+      (exercism//macroexpand-all)
+      (exercism//replace-symbols-with-placeholders
+       symbols-not-to-replace))))
 
 (defun exercism//file-to-string (file)
   "Convert FILE to string."
