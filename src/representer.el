@@ -70,6 +70,17 @@
              '(defun cl-defun))
             (stringp (nth 3 ele)))
        (seq-remove-at-position ele 3))
+      ((and (listp ele)
+            (length> ele 3)
+            (seq-some
+             (lambda (symbol) (eq symbol (car ele)))
+             '(defvar defconst defvar-1
+                defvar-local
+                defvar-mode-local
+                defconst-1
+                defconst-mode-local))
+            (stringp (nth 3 ele)))
+       (seq-remove-at-position ele 3))
       (t
        ele)))
    expressions))
