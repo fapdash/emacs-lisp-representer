@@ -27,18 +27,16 @@ output_dir="${3%/}"
 representation_txt_file="${output_dir}/representation.txt"
 representation_json_file="${output_dir}/representation.json"
 mapping_file="${output_dir}/mapping.json"
+representer_dir=src
 
 # Create the output directory if it doesn't exist
 mkdir -p "${output_dir}"
 
 echo "${slug}: creating representation..."
 
-# Create the representation for the solution
-# TODO: replace the below commands with your own commands 
-# to create the representation.txt, representation.json and
-# mapping.json files
-echo '' > "${representation_txt_file}"
-echo '{"version": 1}' > "${representation_json_file}"
-echo '{}' > "${mapping_file}"
+
+# TODO(FAP): Load compiled files instead? For which platform do we have to do nativecomp?
+emacs -batch -L "${representer_dir}" --init-directory="$representer_dir" -l "${representer_dir}/init.el" -l "${representer_dir}/representer.el" --eval "(exercism/represent \"${slug}\" \"${input_dir}\" \"${output_dir}\")"
+# TODO(FAP): use jq to pretty print and order the json output instead of slow elisp?
 
 echo "${slug}: done"
