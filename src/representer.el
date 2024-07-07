@@ -24,7 +24,9 @@
     (with-temp-file (file-name-concat output-dir
                                       "representation.json")
       (insert (json-encode '(("version" . 1))))
-      (json-pretty-print-buffer))))
+      (json-pretty-print-buffer)
+      (goto-char (point-max))
+      (newline))))
 
 (defun exercism//represent (input-dir exercise-slug)
   (let ((symbols-not-to-replace
