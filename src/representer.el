@@ -11,20 +11,8 @@
 (require 'symbols-from-obarray)
 
 (defun exercism/represent (exercise-slug input-dir output-dir)
-  (let* ((symbols-not-to-replace
-          (exercism//find-all-defined-symbols
-           (file-name-concat input-dir
-                             (concat exercise-slug "-test.el"))))
-
-         (solution-text
-          (exercism//file-to-string
-           (file-name-concat input-dir (concat exercise-slug ".el"))))
-         (expressions (exercism//read-all-from-string solution-text))
-         (expressions-macroexpanded
-          (exercism//macroexpand-all expressions))
-         (expressions-symbols-replaced
-          (exercism//replace-symbols-with-placeholders
-           expressions-macroexpanded symbols-not-to-replace)))
+  (let* ((expressions-symbols-replaced
+          (exercism//represent input-dir exercise-slug)))
     (with-temp-file (file-name-concat output-dir "mapping.json")
       (insert (json-encode (exercism//placeholders->alist)))
       (json-pretty-print-buffer-ordered)
@@ -36,6 +24,22 @@
                                       "representation.json")
       (insert (json-encode '(("version" . 1))))
       (json-pretty-print-buffer))))
+
+(defun exercism//represent (input-dir exercise-slug)
+  (let* ((symbols-not-to-replace
+          (exercism//find-all-defined-symbols
+           (file-name-concat input-dir
+                             (concat exercise-slug "-test.el"))))
+         (solution-text
+          (exercism//file-to-string
+           (file-name-concat input-dir (concat exercise-slug ".el"))))
+         (expressions (exercism//read-all-from-string solution-text))
+         (expressions-macroexpanded
+          (exercism//macroexpand-all expressions))
+         (expressions-symbols-replaced
+          (exercism//replace-symbols-with-placeholders
+           expressions-macroexpanded symbols-not-to-replace)))
+    expressions-symbols-replaced))
 
 (defun exercism//file-to-string (file)
   "Convert FILE to string."
