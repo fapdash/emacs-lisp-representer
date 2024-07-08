@@ -112,7 +112,7 @@ and symbols from the test file."
             (or (exercism//symbol-is-keyword-p ele)
                 (gethash ele symbols-not-to-replace)))
        ele)
-      ;; check for ~#'(lambda ...)~
+      ;; check for ~#'(lambda ...)~, which [cl-]defun expands to
       ((and (listp ele)
             (length> ele 1)
             (eq (car ele) 'function)
