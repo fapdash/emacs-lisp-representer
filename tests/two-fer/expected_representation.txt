@@ -1,0 +1,4 @@
+((defalias 'two-fer #'(lambda (&optional PLACEHOLDER-0)
+			(let ((PLACEHOLDER-1 (or PLACEHOLDER-0 "you")))
+			  (concat "One for " PLACEHOLDER-1 ", one for me."))))
+ (provide 'two-fer))
