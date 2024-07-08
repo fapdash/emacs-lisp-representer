@@ -66,13 +66,6 @@
    (lambda (ele)
      (cond
       ((and (listp ele)
-            (length> ele 2)
-            (seq-some
-             (lambda (symbol) (eq symbol (car ele)))
-             '(defun cl-defun))
-            (stringp (nth 3 ele)))
-       (seq-remove-at-position ele 3))
-      ((and (listp ele)
             (length> ele 3)
             (seq-some
              (lambda (symbol) (eq symbol (car ele)))
@@ -119,11 +112,29 @@ and symbols from the test file."
             (or (exercism//symbol-is-keyword-p ele)
                 (gethash ele symbols-not-to-replace)))
        ele)
+      ;; check for ~#'(lambda ...)~
+      ((and (listp ele)
+            (length> ele 1)
+            (eq (car ele) 'function)
+            (listp (nth 1 ele))
+            (length> (nth 1 ele) 2))
+       (let* ((lambda-expr (nth 1 ele))
+              (doc-string (nth 2 lambda-expr)))
+         (if (stringp doc-string)
+             (exercism//remove-nth-element 2 (nth 1 ele))))
+       ele)
       ((and (symbolp ele))
        (exercism//add-placeholder ele))
       (t
        ele)))
    expressions))
+
+(defun exercism//remove-nth-element (nth list)
+  (if (zerop nth)
+      (cdr list)
+    (let ((last (nthcdr (1- nth) list)))
+      (setcdr last (cddr last))
+      list)))
 
 (defun exercism//symbol-is-keyword-p (symbol)
   (eq (aref (symbol-name symbol) 0) ?&))
