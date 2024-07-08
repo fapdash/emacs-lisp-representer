@@ -120,7 +120,6 @@ and symbols from the test file."
                 (gethash ele symbols-not-to-replace)))
        ele)
       ((and (symbolp ele))
-       ele
        (exercism//add-placeholder ele))
       (t
        ele)))
