@@ -1,3 +1,5 @@
 /tests/**/*/representation.txt
 /tests/**/*/representation.json
 /tests/**/*/mapping.json
+src/elpa
+*.elc

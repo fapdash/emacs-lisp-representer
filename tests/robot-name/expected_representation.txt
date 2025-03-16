@@ -1,0 +1,37 @@
+((require 'PLACEHOLDER-0) (defvar PLACEHOLDER-1 (make-hash-table))
+ (defvar PLACEHOLDER-2 0) (defalias 'build-robot #'(lambda ()
+						     (let ((random
+							    (PLACEHOLDER-3)))
+						       (while
+							   (gethash random
+								    PLACEHOLDER-1)
+							 (setq random
+							       (PLACEHOLDER-3)))
+						       (setq PLACEHOLDER-2
+							     (1+
+							      PLACEHOLDER-2))
+						       (puthash PLACEHOLDER-2
+								random
+								PLACEHOLDER-1)
+						       PLACEHOLDER-2)))
+ (defalias 'robot-name #'(lambda (name)
+			   (gethash name PLACEHOLDER-1)))
+ (defalias 'reset-robot #'
+   (lambda (robot)
+
+
+     (puthash robot
+	      (PLACEHOLDER-3)
+	
+	      PLACEHOLDER-1)))
+ (defalias 'PLACEHOLDER-3 #'(lambda ()
+			
+			      (format "%c%c%03d"
+				      (+ ?A
+					 (random
+					  26))
+				      (+ ?A
+					 (random
+					  26))
+				
+				      (random 1000)))) (provide 'robot-name))

@@ -1,6 +1,8 @@
-FROM alpine:3.18.3
+FROM silex/emacs:29.4-alpine
 
-# TODO: install packages required to run the representer
+# TODO(FAP): install emacs package dependencies during Docker image build?
+
+# TODO(FAP): either use jq or don't install
 RUN apk add --no-cache bash jq
 
 WORKDIR /opt/representer
